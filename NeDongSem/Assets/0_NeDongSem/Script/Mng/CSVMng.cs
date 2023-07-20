@@ -26,4 +26,9 @@ public class CSVMng : MonoBehaviour
         string[] CSVTextLineArray = System.IO.File.ReadAllLines(_strPath);
         return CSVTextLineArray;
     }
+
+    public string[] Get_CSVTextDivision(string _strText, string _strDivisionText)
+    {
+        return _strText.Split(_strDivisionText);
+    }
 }

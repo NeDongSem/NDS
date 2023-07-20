@@ -503,6 +503,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: dfca1c5301cd6a140ae5bb10da5e6de0, type: 3}
   - {fileID: 21300000, guid: c49534cd6526fe84cb753f604b9c39e0, type: 3}
   - {fileID: 21300000, guid: f3a3eea21e09fe347a71be8ec6082ada, type: 3}
+  m_Tile: {fileID: 6336788854953659778, guid: 54f4b6dbd0e32214cb2ba1cf65a4eb10, type: 3}
   m_CloneTile: {fileID: 958526124}
 --- !u!4 &973652413
 Transform:
