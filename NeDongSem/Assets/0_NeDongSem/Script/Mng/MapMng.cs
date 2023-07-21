@@ -58,7 +58,7 @@ public class MapMng : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        Set_CreateStageMap(32,32);
+        Set_CreateStageMap(16,16);
     }
 
     private void Setting()
