@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class MapMng : MonoBehaviour
+public class MapMng_2D : MonoBehaviour
 {
-    static private MapMng instance = null;
-    static public MapMng Instance { get { return instance; } }
+    static private MapMng_2D instance = null;
+    static public MapMng_2D Instance { get { return instance; } }
 
     public enum eTileType
     {
@@ -17,14 +18,13 @@ public class MapMng : MonoBehaviour
         TileType_End
     }
 
-    public GameObject m_BackgroundParent;
-    public GameObject m_Background;
-    public GameObject m_TileParent;
+    public List<Sprite> m_TileSpriteList;
     public GameObject m_Tile;
-    public List<Material> m_TileMaterialList;
+    public GameObject m_CloneTile;
     List<List<GameObject>> m_StageMapTileList;
     int m_iEnemyTileCount;
     List<GameObject> m_EnemyTileList;
+
     struct stTileSize
     {
         int iTileSizeX;
@@ -42,6 +42,7 @@ public class MapMng : MonoBehaviour
     }
     stTileSize TileSize;
 
+
     private void Awake()
     {
         //InstanceCheck
@@ -49,24 +50,21 @@ public class MapMng : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+
             Setting();
         }
         else
         {
             Destroy(this.gameObject);
         }
+
+        Set_CreateStageMap(16,16);
     }
 
     private void Setting()
     {
-        //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
         m_StageMapTileList = new List<List<GameObject>>();
         m_EnemyTileList = new List<GameObject>();
-    }
-
-    private void Start()
-    {
-        Set_CreateStageMap(16, 16);
     }
 
     public void Set_CreateStageMap(int _iTileSizeX = 0, int _iTileSizeY = 0)
@@ -75,28 +73,16 @@ public class MapMng : MonoBehaviour
         {
             TileSize.X = _iTileSizeX;
         }
-        if (_iTileSizeY != 0)
+        if(_iTileSizeY != 0)
         {
             TileSize.Y = _iTileSizeY;
         }
-        CreateBackground(TileSize.X, TileSize.Y);
 
         string[] CSVTextLineArray = Get_NowStageMapCSV();
         EnemyTile_Init(CSVTextLineArray);
         int iTileCountX = CSVMng.Instance.Get_CSVTextDivision(CSVTextLineArray[0], ",").Length;
         CreateStageMap_Init(CSVTextLineArray.Length, iTileCountX);
         CreateStageMap_Setting(CSVTextLineArray, CSVTextLineArray.Length, iTileCountX);
-    }
-
-    private void CreateBackground(int _iSizeX, int _iSizeY)
-    {
-        Transform BackgroundTransform = Instantiate(m_Background, m_BackgroundParent.transform).transform;
-        BackgroundTransform.position = new Vector3(0f, 0f, 0.01f);
-        BackgroundTransform.Rotate(Vector3.zero);
-        Vector3 BackgroundScale = BackgroundTransform.localScale;
-        BackgroundScale.x *= _iSizeX;
-        BackgroundScale.y *= _iSizeY;
-        BackgroundTransform.localScale = BackgroundScale;
     }
 
     private void EnemyTile_Init(string[] _CSVTextLineArray)
@@ -108,13 +94,13 @@ public class MapMng : MonoBehaviour
             string[] TileLineArray = _CSVTextLineArray[i].Split(",");
             for (int j = 0; j < TileLineArray.Length; ++j)
             {
-                if ((TileLineArray[j] != "") && (TileLineArray[j][0] == '1'))
+                if((TileLineArray[j] != "") && (TileLineArray[j][0] == '1'))
                 {
                     string EnemyTile = TileLineArray[j];
                     EnemyTile = EnemyTile.Substring(2, EnemyTile.Length - 3);
                     string[] EnemyTileNum = EnemyTile.Split("&");
 
-                    for (int k = 0; k < EnemyTileNum.Length; ++k)
+                    for(int k = 0; k < EnemyTileNum.Length; ++k)
                     {
                         if (int.Parse(EnemyTileNum[k]) > m_iEnemyTileCount)
                         {
@@ -150,7 +136,7 @@ public class MapMng : MonoBehaviour
         return CSVMng.Instance.Get_CSVTextLineArray(CSVPath);
     }
 
-    private void CreateStageMap_Init(int _iTileCountY, int _iTileCountX = 0)
+    private void CreateStageMap_Init(int _iTileCountY , int _iTileCountX = 0)
     {
         int TileCountX, TileCountY;
         TileCountY = _iTileCountY;
@@ -165,32 +151,32 @@ public class MapMng : MonoBehaviour
 
         int StageMapTileListCount = m_StageMapTileList.Count;
 
-        if (StageMapTileListCount < TileCountY)
+        if(StageMapTileListCount < TileCountY)
         {
             int AddCount = TileCountY - StageMapTileListCount;
 
-            for (int i = 0; i < AddCount; ++i)
+            for(int i = 0; i < AddCount; ++i)
             {
                 List<GameObject> TileLineList = new List<GameObject>();
                 m_StageMapTileList.Add(TileLineList);
 
                 string Name = "TileLine" + (StageMapTileListCount + i + 1).ToString();
                 GameObject TileLineGameObject = new GameObject(Name);
-                TileLineGameObject.transform.parent = m_TileParent.transform;
+                TileLineGameObject.transform.parent = m_CloneTile.transform;
             }
         }
 
-        for (int i = 0; i < TileCountY; ++i)
+        for(int i = 0; i < TileCountY; ++i)
         {
             int LineTileCount = m_StageMapTileList[i].Count;
 
-            if (LineTileCount < TileCountX)
+            if(LineTileCount < TileCountX)
             {
                 int AddCount = TileCountX - LineTileCount;
 
                 for (int j = 0; j < AddCount; ++j)
                 {
-                    Transform TileLineTransform = m_TileParent.transform.GetChild(i);
+                    Transform TileLineTransform = m_CloneTile.transform.GetChild(i);
                     GameObject Tile = Instantiate(m_Tile, TileLineTransform);
                     Tile.name += (LineTileCount + j + 1).ToString();
                     m_StageMapTileList[i].Add(Tile);
@@ -201,11 +187,11 @@ public class MapMng : MonoBehaviour
 
     private void CreateStageMap_Setting(string[] _CSVTextLineArray, int _iTileCountY, int _iTileCountX = 0)
     {
-        int CloneTileChildCount = m_TileParent.transform.childCount;
+        int CloneTileChildCount = m_CloneTile.transform.childCount;
         for (int i = 0; i < CloneTileChildCount; ++i)
         {
-            Transform TileLineTransform = m_TileParent.transform.GetChild(i);
-            if (i < _iTileCountY)
+            Transform TileLineTransform = m_CloneTile.transform.GetChild(i);
+            if(i < _iTileCountY)
             {
                 TileLineTransform.gameObject.SetActive(true);
                 TileLineTransform.localPosition = Vector3.zero;
@@ -255,32 +241,33 @@ public class MapMng : MonoBehaviour
     private void Tile_Setting(float _fPosX, float _fPosY, GameObject _TileGameObject, string _strTile)
     {
         eTileType TileType = StringToTileType(_strTile);
-        if (TileType == eTileType.Enemy)
+        if(TileType == eTileType.Enemy)
         {
             EnemyTile_Setting(_TileGameObject, _strTile);
         }
-        Transform TileTransform = _TileGameObject.GetComponent<Transform>();
-        TileTransform.position = new Vector3(_fPosX, _fPosY, 0f);
-        TileTransform.localScale = new Vector3(TileSize.X, TileSize.Y, 0f);
-        TileTransform.Rotate(Vector3.zero);
+        RectTransform TileRectTransform = _TileGameObject.GetComponent<RectTransform>();
+        TileRectTransform.anchoredPosition = new Vector2(_fPosX, _fPosY);
+        TileRectTransform.sizeDelta = new Vector2(TileSize.X, TileSize.Y);
+        TileRectTransform.Rotate(Vector3.zero);
+        TileRectTransform.localScale = new Vector3(1, 1, 1);
 
-        MeshRenderer TileMeshRenderer = _TileGameObject.GetComponent<MeshRenderer>();
-        TileMeshRenderer.material = m_TileMaterialList[(int)TileType];
+        Image TileImage = _TileGameObject.GetComponent<Image>();
+        TileImage.sprite = m_TileSpriteList[(int)TileType];
     }
 
     private eTileType StringToTileType(string _strTile)
     {
         eTileType TileType = eTileType.TileType_End;
 
-        if (_strTile == "")
+        if(_strTile == "")
         {
             TileType = eTileType.NDS;
         }
-        else if (_strTile == "0")
+        else if(_strTile == "0")
         {
             TileType = eTileType.Edge;
         }
-        else if (_strTile[0] == '1')
+        else if(_strTile[0] == '1')
         {
             TileType = eTileType.Enemy;
         }
@@ -288,7 +275,7 @@ public class MapMng : MonoBehaviour
         {
             TileType = eTileType.NDS;
         }
-        else if (_strTile == "3")
+        else if(_strTile == "3")
         {
             TileType = eTileType.Block;
         }
@@ -305,7 +292,7 @@ public class MapMng : MonoBehaviour
         EnemyTile = EnemyTile.Substring(2, EnemyTile.Length - 3);
         string[] EnemyTileNum = EnemyTile.Split("&");
 
-        for (int i = 0; i < EnemyTileNum.Length; ++i)
+        for(int i = 0; i < EnemyTileNum.Length; ++i)
         {
             int iEnemyTileNum = int.Parse(EnemyTileNum[i]);
             m_EnemyTileList[iEnemyTileNum] = _EnemyTileGameObject;
