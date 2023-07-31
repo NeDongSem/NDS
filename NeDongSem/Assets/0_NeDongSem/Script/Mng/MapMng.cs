@@ -49,7 +49,7 @@ public class MapMng : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
-            Setting();
+            Init();
         }
         else
         {
@@ -57,7 +57,7 @@ public class MapMng : MonoBehaviour
         }
     }
 
-    private void Setting()
+    private void Init()
     {
         //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
         m_StageMapTileList = new List<List<GameObject>>();
