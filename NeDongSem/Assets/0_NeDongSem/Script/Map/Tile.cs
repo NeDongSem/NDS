@@ -4,15 +4,44 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private int m_parentTileNumber = 0;
+    private int m_tileNumber = 0;
+
     void Start()
     {
-        
+        SetTileName();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SetTileName()
     {
-        
+        string _parentTileNumber;
+        string _tileNumber;
+
+        if (transform.parent.name.Length == 9)
+        {
+            _parentTileNumber = transform.parent.name.Substring(transform.parent.name.Length - 1);
+            int.TryParse(_parentTileNumber, out m_parentTileNumber);
+        }
+        else if(transform.parent.name.Length == 10)
+        {
+            _parentTileNumber = transform.parent.name.Substring(transform.parent.name.Length - 2);
+            int.TryParse(_parentTileNumber, out m_parentTileNumber);
+        }
+
+        if (transform.name.Length == 15)
+        {
+            _tileNumber = transform.name.Substring(transform.name.Length - 1);
+            int.TryParse(_tileNumber, out m_tileNumber);
+        }
+        else if (transform.name.Length == 16)
+        {
+            _tileNumber = transform.name.Substring(transform.name.Length - 2);
+            int.TryParse(_tileNumber, out m_tileNumber);
+        }
+
+        int _finalTileNumber = 0;
+        _finalTileNumber = (m_parentTileNumber - 1) * 12 + m_tileNumber;
+        string _tileName = "Tile" + _finalTileNumber.ToString();
+        transform.name = _tileName;
     }
 }

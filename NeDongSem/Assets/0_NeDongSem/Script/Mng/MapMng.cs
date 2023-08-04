@@ -24,7 +24,7 @@ public class MapMng : MonoBehaviour
     public List<Material> m_TileMaterialList;
     List<List<GameObject>> m_StageMapTileList;
     int m_iEnemyTileCount;
-    List<GameObject> m_EnemyTileList;
+    List<GameObject> m_EnemyTileList; public List<GameObject> EnemyTileList { get { return m_EnemyTileList; } }
     struct stTileSize
     {
         int iTileSizeX;
