@@ -17,6 +17,8 @@ public class MapMng : MonoBehaviour
         TileType_End
     }
 
+    public int m_TileSizeX;
+    public int m_TileSizeY;
     public GameObject m_BackgroundParent;
     public GameObject m_Background;
     public GameObject m_TileParent;
@@ -25,22 +27,22 @@ public class MapMng : MonoBehaviour
     List<List<GameObject>> m_StageMapTileList;
     int m_iEnemyTileCount;
     List<GameObject> m_EnemyTileList; public List<GameObject> EnemyTileList { get { return m_EnemyTileList; } }
-    struct stTileSize
-    {
-        int iTileSizeX;
-        public int X
-        {
-            get { return iTileSizeX; }
-            set { iTileSizeX = value; }
-        }
-        int iTileSizeY;
-        public int Y
-        {
-            get { return iTileSizeY; }
-            set { iTileSizeY = value; }
-        }
-    }
-    stTileSize TileSize;
+    //struct stTileSize
+    //{
+    //    int iTileSizeX;
+    //    public int X
+    //    {
+    //        get { return iTileSizeX; }
+    //        set { iTileSizeX = value; }
+    //    }
+    //    int iTileSizeY;
+    //    public int Y
+    //    {
+    //        get { return iTileSizeY; }
+    //        set { iTileSizeY = value; }
+    //    }
+    //}
+    //stTileSize TileSize;
 
     private void Awake()
     {
@@ -49,7 +51,7 @@ public class MapMng : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
-            Init();
+            StartCoroutine("Init");
         }
         else
         {
@@ -57,35 +59,32 @@ public class MapMng : MonoBehaviour
         }
     }
 
-    private void Init()
+    public IEnumerator Init()
     {
-        //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
-        m_StageMapTileList = new List<List<GameObject>>();
-        m_EnemyTileList = new List<GameObject>();
-        Set_TileSize(16, 16);
-    }
+        while (true)
+        {
+            if (GoogleSheetMng.Instance == null)
+            {
+                yield return null;
+            }
+            else
+            {
+                break;
+            }
+        }
 
-    private void Start()
-    {
         GoogleSheetMng.delDataProcessingFunc delCreateStageMapFunc = new GoogleSheetMng.delDataProcessingFunc(Set_CreateStageMap);
         GoogleSheetMng.Instance.Get_GoogleSheetData("ProtoStage", "A1:L12", delCreateStageMapFunc);
     }
 
-    public void Set_TileSize(int _iTileSizeX = 0, int _iTileSizeY = 0)
-    {
-        if (_iTileSizeX != 0)
-        {
-            TileSize.X = _iTileSizeX;
-        }
-        if (_iTileSizeY != 0)
-        {
-            TileSize.Y = _iTileSizeY;
-        }
-    }
-
     public void Set_CreateStageMap(string[] _strDataLineArray)
     {
-        CreateBackground(TileSize.X, TileSize.Y);
+        //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
+        m_StageMapTileList = new List<List<GameObject>>();
+        m_EnemyTileList = new List<GameObject>();
+
+        //SetTileSize(16, 16);
+        CreateBackground(/*TileSize.X, TileSize.Y*/);
 
         EnemyTile_Init(_strDataLineArray);
         int iTileCountX = CSVMng.Instance.Get_CSVTextDivision(_strDataLineArray[0], ",").Length;
@@ -99,14 +98,27 @@ public class MapMng : MonoBehaviour
         //CreateStageMap_Setting(CSVTextLineArray, CSVTextLineArray.Length, iTileCountX);
     }
 
-    private void CreateBackground(int _iSizeX, int _iSizeY)
+    //private void SetTileSize(int _iTileSizeX = 0, int _iTileSizeY = 0)
+    //{
+    //    if (_iTileSizeX != 0)
+    //    {
+    //        TileSize.X = _iTileSizeX;
+    //    }
+    //    if (_iTileSizeY != 0)
+    //    {
+    //        TileSize.Y = _iTileSizeY;
+    //    }
+    //}
+    private void CreateBackground(/*int _iSizeX, int _iSizeY*/)
     {
         Transform BackgroundTransform = Instantiate(m_Background, m_BackgroundParent.transform).transform;
         BackgroundTransform.position = new Vector3(0f, 0f, 0.01f);
         BackgroundTransform.Rotate(Vector3.zero);
         Vector3 BackgroundScale = BackgroundTransform.localScale;
-        BackgroundScale.x *= _iSizeX;
-        BackgroundScale.y *= _iSizeY;
+        //BackgroundScale.x *= _iSizeX;
+        //BackgroundScale.y *= _iSizeY;
+        BackgroundScale.x *= m_TileSizeX;
+        BackgroundScale.y *= m_TileSizeY;
         BackgroundTransform.localScale = BackgroundScale;
     }
 
@@ -240,10 +252,15 @@ public class MapMng : MonoBehaviour
         }
         TileCountY = _iTileCountY;
 
-        float fCenterPosX = (TileCountX * TileSize.X) * 0.5f;
-        float fCenterPosY = (TileCountY * TileSize.Y) * 0.5f;
-        float fFirstPosX = 0 - fCenterPosX + (TileSize.X * 0.5f);
-        float fFirstPosY = fCenterPosY - (TileSize.Y * 0.5f);
+        //float fCenterPosX = (TileCountX * TileSize.X) * 0.5f;
+        //float fCenterPosY = (TileCountY * TileSize.Y) * 0.5f;
+        //float fFirstPosX = 0 - fCenterPosX + (TileSize.X * 0.5f);
+        //float fFirstPosY = fCenterPosY - (TileSize.Y * 0.5f);
+
+        float fCenterPosX = (TileCountX * m_TileSizeX) * 0.5f;
+        float fCenterPosY = (TileCountY * m_TileSizeY) * 0.5f;
+        float fFirstPosX = 0 - fCenterPosX + (m_TileSizeX * 0.5f);
+        float fFirstPosY = fCenterPosY - (m_TileSizeY * 0.5f);
 
         for (int i = 0; i < _CSVTextLineArray.Length; ++i)
         {
@@ -253,7 +270,8 @@ public class MapMng : MonoBehaviour
             {
                 if (j < _iTileCountX)
                 {
-                    Tile_Setting(fFirstPosX + (j * TileSize.X), fFirstPosY - (i * TileSize.Y), m_StageMapTileList[i][j], TextArray[j]);
+                    //Tile_Setting(fFirstPosX + (j * TileSize.X), fFirstPosY - (i * TileSize.Y), m_StageMapTileList[i][j], TextArray[j]);
+                    Tile_Setting(fFirstPosX + (j * m_TileSizeX), fFirstPosY - (i * m_TileSizeY), m_StageMapTileList[i][j], TextArray[j]);
                 }
                 else
                 {
@@ -272,7 +290,8 @@ public class MapMng : MonoBehaviour
         }
         Transform TileTransform = _TileGameObject.GetComponent<Transform>();
         TileTransform.position = new Vector3(_fPosX, _fPosY, 0f);
-        TileTransform.localScale = new Vector3(TileSize.X, TileSize.Y, 0f);
+        //TileTransform.localScale = new Vector3(TileSize.X, TileSize.Y, 0f);
+        TileTransform.localScale = new Vector3(m_TileSizeX, m_TileSizeY, 0f);
         TileTransform.Rotate(Vector3.zero);
 
         MeshRenderer TileMeshRenderer = _TileGameObject.GetComponent<MeshRenderer>();
