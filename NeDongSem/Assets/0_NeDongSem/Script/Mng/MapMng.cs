@@ -283,7 +283,11 @@ public class MapMng : MonoBehaviour
     {
         eTileType TileType = eTileType.TileType_End;
 
-        if (_strTile == "0")
+        if(_strTile == "")
+        {
+            TileType = eTileType.NDS;
+        }
+        else if(_strTile == "0")
         {
             TileType = eTileType.Edge;
         }
