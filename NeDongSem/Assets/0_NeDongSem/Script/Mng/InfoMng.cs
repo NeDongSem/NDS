@@ -7,6 +7,8 @@ public class InfoMng : MonoBehaviour
     static private InfoMng instance = null;
     static public InfoMng Instance { get { return instance; } }
 
+    public string m_TowerSheetRange = "A1:E25";
+    public string m_EnemySheetRange = "A1:C51";
     List<string> m_TowerInfoTitleList;
     Dictionary<string, Dictionary<string,string>> m_TowerInfoDictionary;
     List<string> m_EnemyInfoTitleList;
