@@ -62,14 +62,16 @@ public class MapMng : MonoBehaviour
         //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
         m_StageMapTileList = new List<List<GameObject>>();
         m_EnemyTileList = new List<GameObject>();
+        Set_TileSize(16, 16);
     }
 
     private void Start()
     {
-        Set_CreateStageMap(16, 16);
+        GoogleSheetMng.delDataProcessingFunc delCreateStageMapFunc = new GoogleSheetMng.delDataProcessingFunc(Set_CreateStageMap);
+        GoogleSheetMng.Instance.Get_GoogleSheetData("ProtoStage", "A1:L12", delCreateStageMapFunc);
     }
 
-    public void Set_CreateStageMap(int _iTileSizeX = 0, int _iTileSizeY = 0)
+    public void Set_TileSize(int _iTileSizeX = 0, int _iTileSizeY = 0)
     {
         if (_iTileSizeX != 0)
         {
@@ -79,13 +81,22 @@ public class MapMng : MonoBehaviour
         {
             TileSize.Y = _iTileSizeY;
         }
+    }
+
+    public void Set_CreateStageMap(string[] _strDataLineArray)
+    {
         CreateBackground(TileSize.X, TileSize.Y);
 
-        string[] CSVTextLineArray = Get_NowStageMapCSV();
-        EnemyTile_Init(CSVTextLineArray);
-        int iTileCountX = CSVMng.Instance.Get_CSVTextDivision(CSVTextLineArray[0], ",").Length;
-        CreateStageMap_Init(CSVTextLineArray.Length, iTileCountX);
-        CreateStageMap_Setting(CSVTextLineArray, CSVTextLineArray.Length, iTileCountX);
+        EnemyTile_Init(_strDataLineArray);
+        int iTileCountX = CSVMng.Instance.Get_CSVTextDivision(_strDataLineArray[0], ",").Length;
+        CreateStageMap_Init(_strDataLineArray.Length, iTileCountX);
+        CreateStageMap_Setting(_strDataLineArray, _strDataLineArray.Length, iTileCountX);
+
+        //string[] CSVTextLineArray = Get_NowStageMapCSV();
+        //EnemyTile_Init(CSVTextLineArray);
+        //int iTileCountX = CSVMng.Instance.Get_CSVTextDivision(CSVTextLineArray[0], ",").Length;
+        //CreateStageMap_Init(CSVTextLineArray.Length, iTileCountX);
+        //CreateStageMap_Setting(CSVTextLineArray, CSVTextLineArray.Length, iTileCountX);
     }
 
     private void CreateBackground(int _iSizeX, int _iSizeY)
@@ -272,11 +283,7 @@ public class MapMng : MonoBehaviour
     {
         eTileType TileType = eTileType.TileType_End;
 
-        if (_strTile == "")
-        {
-            TileType = eTileType.NDS;
-        }
-        else if (_strTile == "0")
+        if (_strTile == "0")
         {
             TileType = eTileType.Edge;
         }
