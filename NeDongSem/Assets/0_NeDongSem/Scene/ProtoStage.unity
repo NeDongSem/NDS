@@ -347,7 +347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2067750092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,8 +361,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MainCamera: {fileID: 2087665689}
-  m_CameraMoveSpeed: 3
+  m_CameraMoveSpeed: 5
   m_CameraZoomSpeed: 2
+  m_CameraMoveMinMaxPosX: {x: -150, y: 150}
+  m_CameraMoveMinMaxPosY: {x: -200, y: 200}
   m_CameraFovMinMax: {x: 30, y: 120}
 --- !u!4 &2067750093
 Transform:
@@ -526,6 +528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e716742904ff8324bbcf432fe552b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TowerSheetRange: A1:E25
+  m_EnemySheetRange: A1:C51
 --- !u!4 &2108996932
 Transform:
   m_ObjectHideFlags: 0
