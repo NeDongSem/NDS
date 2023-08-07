@@ -40,12 +40,12 @@ public class InputMng : MonoBehaviour
     {
         m_TouchArray = new Touch[2];
         m_fTouchPreMag = 0f;
+        //StartCoroutine("ScreenRotate");
     }
 
     private void Update()
     {
         Touch();
-
     }
 
     private void Touch()
@@ -166,4 +166,39 @@ public class InputMng : MonoBehaviour
         m_v2TouchPreCenterPos.x = -1f;
         m_v2TouchPreCenterPos.y = -1f;
     }
+
+    //IEnumerator ScreenRotate()
+    //{
+    //    bool bLandscapeRight;
+    //    if(Screen.orientation == ScreenOrientation.LandscapeRight)
+    //    {
+    //        bLandscapeRight = true;
+    //    }
+    //    else
+    //    {
+    //        bLandscapeRight = false;
+    //    }
+
+    //    while(true)
+    //    {
+    //        if(bLandscapeRight)
+    //        {
+    //            if(Input.acceleration.y > 0.5f)
+    //            {
+    //                    Screen.orientation = ScreenOrientation.LandscapeLeft;
+    //                    bLandscapeRight = false;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            if (Input.acceleration.y <= 0.5f)
+    //            {
+    //                    Screen.orientation = ScreenOrientation.LandscapeRight;
+    //                    bLandscapeRight = true;
+    //            }
+    //        }
+
+    //        yield return new WaitForSecondsRealtime(0.5f);
+    //    }
+    //}
 }
