@@ -17,6 +17,8 @@ public class MapMng : MonoBehaviour
         TileType_End
     }
 
+    public string m_SheetRange = "";
+
     public int m_TileSizeX;
     public int m_TileSizeY;
     public GameObject m_BackgroundParent;
@@ -26,7 +28,8 @@ public class MapMng : MonoBehaviour
     public List<Material> m_TileMaterialList;
     List<List<GameObject>> m_StageMapTileList;
     int m_iEnemyTileCount;
-    List<GameObject> m_EnemyTileList; public List<GameObject> EnemyTileList { get { return m_EnemyTileList; } }
+    List<GameObject> m_EnemyTileList;
+    public List<GameObject> EnemyTileList { get { return m_EnemyTileList; } }
     //struct stTileSize
     //{
     //    int iTileSizeX;
@@ -73,11 +76,16 @@ public class MapMng : MonoBehaviour
             }
         }
 
-        GoogleSheetMng.delDataProcessingFunc delCreateStageMapFunc = new GoogleSheetMng.delDataProcessingFunc(Set_CreateStageMap);
-        GoogleSheetMng.Instance.Get_GoogleSheetData("ProtoStage", "A1:L12", delCreateStageMapFunc);
+        Set_CreateMap();
     }
 
-    public void Set_CreateStageMap(string[] _strDataLineArray)
+    public void Set_CreateMap()
+    {
+        GoogleSheetMng.delDataProcessingFunc delCreateStageMapFunc = new GoogleSheetMng.delDataProcessingFunc(CreateStageMap);
+        GoogleSheetMng.Instance.Get_GoogleSheetData(SceneManager.GetActiveScene().name, m_SheetRange, delCreateStageMapFunc);
+    }
+
+    private void CreateStageMap(string[] _strDataLineArray)
     {
         //m_TileList = new List<GameObject>(); ¿ŒΩ∫∆Â≈Õø°º≠ «ÿ¡‹
         m_StageMapTileList = new List<List<GameObject>>();

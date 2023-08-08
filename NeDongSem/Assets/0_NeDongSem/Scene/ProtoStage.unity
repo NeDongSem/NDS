@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7346be8d8ec4ecc4a987b2e75452c591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SheetRange: A1:R12
   m_TileSizeX: 16
   m_TileSizeY: 16
   m_BackgroundParent: {fileID: 1651330864}
@@ -363,9 +364,9 @@ MonoBehaviour:
   m_MainCamera: {fileID: 2087665689}
   m_CameraMoveSpeed: 5
   m_CameraZoomSpeed: 2
-  m_CameraMoveMinMaxPosX: {x: -150, y: 150}
-  m_CameraMoveMinMaxPosY: {x: -200, y: 200}
-  m_CameraFovMinMax: {x: 30, y: 120}
+  m_CameraMoveMinMaxPosX: {x: -125, y: 125}
+  m_CameraMoveMinMaxPosY: {x: -175, y: 175}
+  m_CameraFovMinMax: {x: 30, y: 100}
 --- !u!4 &2067750093
 Transform:
   m_ObjectHideFlags: 0
