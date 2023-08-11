@@ -15,12 +15,12 @@ public class EnemyController : MonoBehaviour
     private bool m_isEnemyMoveStart = false;//적이 활성화 되었는가
     private float m_elapsedTime = 0.0f;
     private float m_delayTime = 0.0f;
-    private float m_updateDelayTime = 3.0f; //3초 동안 Update 함수 지연
+    private float m_updateDelayTime = 2.0f; //3초 동안 Update 함수 지연
     private List<GameObject> m_enemyTileList = new List<GameObject>();
     [SerializeField] private EnemyState m_enemyState = EnemyState.Moveable;
     private int m_enemyTargetPosNumber = 1;//MapMng.Instance.EnemyTileList 인덱스 값
     private Vector3 m_v3EnemyTargetPos;//적이 도착할 목표값
-    private float m_enemySpeed = 0.1f;
+    private float m_enemySpeed = 0;
 
     void Start()
     {
@@ -40,6 +40,14 @@ public class EnemyController : MonoBehaviour
         //MapMng.cs의 m_EnemyTileList를 인지하기 위함이다.
         else if (!m_isEnemyMoveStart)
         {
+            if (m_enemySpeed == 0)
+            {
+                if (InfoMng.Instance.EnemyInfoDictionary != null)
+                {
+                    m_enemySpeed = int.Parse(InfoMng.Instance.Get_EnemyInfo("1", "Speed"));
+                }
+            }
+            
             //얕은 복사
             //적이 맵을 인식
             m_enemyTileList = MapMng.Instance.EnemyTileList;
@@ -49,6 +57,10 @@ public class EnemyController : MonoBehaviour
                 transform.position = m_enemyTileList[0].transform.position;
             }
             catch (System.ArgumentOutOfRangeException)
+            {
+
+            }
+            catch (System.NullReferenceException)
             {
 
             }
@@ -87,7 +99,7 @@ public class EnemyController : MonoBehaviour
                 }
             case EnemyState.Move:
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, m_v3EnemyTargetPos, m_enemySpeed);
+                    transform.position = Vector3.MoveTowards(transform.position, m_v3EnemyTargetPos, m_enemySpeed * Time.deltaTime);
                     if (transform.position == m_v3EnemyTargetPos)
                     {
                         m_enemyState = EnemyState.Arrival;

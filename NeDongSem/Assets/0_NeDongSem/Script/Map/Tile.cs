@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     private int m_parentTileNumber = 0;
     private int m_tileNumber = 0;
+    private int m_col = 18;//¸ÊÀÇ ¿­ÀÇ ¼ö
 
     void Start()
     {
@@ -40,7 +41,7 @@ public class Tile : MonoBehaviour
         }
 
         int _finalTileNumber = 0;
-        _finalTileNumber = (m_parentTileNumber - 1) * 12 + m_tileNumber;
+        _finalTileNumber = (m_parentTileNumber - 1) * m_col + m_tileNumber;
         string _tileName = "Tile" + _finalTileNumber.ToString();
         transform.name = _tileName;
     }

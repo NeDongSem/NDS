@@ -12,7 +12,7 @@ public class InfoMng : MonoBehaviour
     List<string> m_TowerInfoTitleList;
     Dictionary<string, Dictionary<string,string>> m_TowerInfoDictionary;
     List<string> m_EnemyInfoTitleList;
-    Dictionary<string, Dictionary<string, string>> m_EnemyInfoDictionary;
+    Dictionary<string, Dictionary<string, string>> m_EnemyInfoDictionary; public Dictionary<string, Dictionary<string, string>> EnemyInfoDictionary { get { return m_EnemyInfoDictionary; } }
 
     private void Awake()
     {
