@@ -62,7 +62,7 @@ public class MapMng : MonoBehaviour
         }
     }
 
-    public IEnumerator Init()
+    private IEnumerator Init()
     {
         while (true)
         {

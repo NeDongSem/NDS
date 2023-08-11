@@ -28,7 +28,7 @@ public class InfoMng : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    public IEnumerator Init()
+    private IEnumerator Init()
     {
         while(true)
         {

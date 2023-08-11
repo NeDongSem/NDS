@@ -26,7 +26,7 @@ public class GoogleSheetMng : MonoBehaviour
         }
     }
 
-    public void Init()
+    private void Init()
     {
 
     }
