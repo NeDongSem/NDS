@@ -25,11 +25,11 @@ public class Projectile : PoolingObject
     {
         if (m_bShooting)
         {
-            Shoot();
+            Shoot_Start();
         }
     }
 
-    virtual protected void Shoot()
+    virtual protected void Shoot_Start()
     {
 
     }
@@ -39,5 +39,10 @@ public class Projectile : PoolingObject
         m_TargetTransform = null;
         m_bShooting = false;
         base.Set_End();
+    }
+
+    virtual public void Shoot_End(bool _bHit = true)
+    {
+        ObjectPoolMng.Instance.Return_PoolingObject(gameObject, m_strName);
     }
 }
