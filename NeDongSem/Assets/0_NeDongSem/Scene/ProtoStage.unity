@@ -198,8 +198,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PoolingObjectFrefabsList:
   - {fileID: 8798688220403468837, guid: b6cac179f934ff340a10b8ae05e92552, type: 3}
+  - {fileID: 6146238621189915905, guid: dfc69db4a3905894b8ebe3096ba82ebe, type: 3}
+  - {fileID: 5781908695988041903, guid: 02f11209935e10e4487356f67d0f86c1, type: 3}
   m_PoolingObjectNameList:
   - SemoProjectile
+  - NemoProjectile
+  - DongramiProjectile
   m_BasicCreateCount: 10
 --- !u!4 &1130525720
 Transform:

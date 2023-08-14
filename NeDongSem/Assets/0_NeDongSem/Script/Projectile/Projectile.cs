@@ -2,34 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eCCType
+{
+    Slow,
+    Stun,
+    eCC_End
+}
+
+public struct stProjectileInfo
+{
+    public float Speed;
+    public float Damage;
+    public eCCType CCType;
+    public float CCValue;
+}
+
 public class Projectile : PoolingObject
 {
-    public float m_Speed;
+    protected Transform m_TowerTransform;
     protected Transform m_TargetTransform;
+    protected stProjectileInfo m_stProjectileInfo;
     protected bool m_bShooting = false;
 
-    public void Set_Shoot(Transform _TargetTransform, Vector3 _v3TowerPos)
+    public void Set_Shoot(Transform _TowerTransform, Transform _TargetTransform , stProjectileInfo _stProjectileInfo)
     {
+        m_TowerTransform = _TowerTransform;
         m_TargetTransform = _TargetTransform;
-        transform.position = _v3TowerPos;
-        //transform.LookAt(_TargetTransform.position);
-
-        float fRadin = Mathf.Atan2(_TargetTransform.position.y - _v3TowerPos.y, _TargetTransform.position.x - _v3TowerPos.x);
-        fRadin *= Mathf.Rad2Deg;
-        transform.Rotate(new Vector3(0f, 0f, fRadin));
-
+        transform.position = _TowerTransform.position;
+        m_stProjectileInfo = _stProjectileInfo;
         m_bShooting = true;
+        Shoot_Start();
     }
 
     protected void Update()
     {
         if (m_bShooting)
         {
-            Shoot_Start();
+            Shoot_ing();
         }
     }
 
     virtual protected void Shoot_Start()
+    {
+
+    }
+
+    virtual protected void Shoot_ing()
     {
 
     }
