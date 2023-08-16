@@ -64,16 +64,9 @@ public class MapMng : MonoBehaviour
 
     private IEnumerator Init()
     {
-        while (true)
+        while (ReferenceEquals(GoogleSheetMng.Instance,null))
         {
-            if (GoogleSheetMng.Instance == null)
-            {
-                yield return null;
-            }
-            else
-            {
-                break;
-            }
+            yield return new WaitForSeconds(0.1f);
         }
 
         Set_CreateMap();

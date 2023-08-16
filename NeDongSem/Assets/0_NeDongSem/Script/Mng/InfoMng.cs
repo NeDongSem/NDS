@@ -30,16 +30,9 @@ public class InfoMng : MonoBehaviour
     }
     private IEnumerator Init()
     {
-        while(true)
+        while (ReferenceEquals(GoogleSheetMng.Instance, null))
         {
-            if (GoogleSheetMng.Instance == null)
-            {
-                yield return null;
-            }
-            else
-            {
-                break;
-            }
+            yield return new WaitForSeconds(0.1f);
         }
 
         GoogleSheetMng.delDataProcessingFunc delTowerInfoSettingFunc = new GoogleSheetMng.delDataProcessingFunc(TowerInfoSetting);

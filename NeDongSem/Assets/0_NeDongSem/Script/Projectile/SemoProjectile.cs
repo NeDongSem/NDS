@@ -20,6 +20,8 @@ public class SemoProjectile : Projectile
     {
         if(other.transform.Equals(m_TargetTransform))
         {
+            Enemy e = other.gameObject.GetComponent<Enemy>();
+            e.hit(1);
             Shoot_End();
         }
     }

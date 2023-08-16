@@ -15,24 +15,43 @@ public class ProjectileFireTest : MonoBehaviour
     GameObject m_CurrentProjectileGameObject;
     private void Update()
     {
-        if (m_fTime >= m_FireTime)
+        if (m_Target != null)
         {
-            m_CurrentProjectileGameObject = ObjectPoolMng.Instance.Get_PoolingObject(m_ProjectileName);
-            stProjectileInfo stProjectileInfo;
-            stProjectileInfo.Speed = m_Speed;
-            stProjectileInfo.Damage = m_Damage;
-            stProjectileInfo.CCType = m_eCCType;
-            stProjectileInfo.CCValue = m_CCValue;
-            m_CurrentProjectileGameObject.GetComponent<Projectile>().Set_Shoot(transform, m_Target, stProjectileInfo);
-            if(m_ProjectileName == "NemoProjectile")
+            if(Vector3.Distance(transform.position, m_Target.position) > 100f)
             {
-                StartCoroutine("NemoProjectileTimer");
+                m_Target = null;
+                m_fTime = 0f;
+                return;
             }
-            m_fTime = 0f;
+
+            if (m_fTime >= m_FireTime)
+            {
+                m_CurrentProjectileGameObject = ObjectPoolMng.Instance.Get_PoolingObject(m_ProjectileName);
+                stProjectileInfo stProjectileInfo;
+                stProjectileInfo.Speed = m_Speed;
+                stProjectileInfo.Damage = m_Damage;
+                stProjectileInfo.CCType = m_eCCType;
+                stProjectileInfo.CCValue = m_CCValue;
+                m_CurrentProjectileGameObject.GetComponent<Projectile>().Set_Shoot(transform, m_Target, stProjectileInfo);
+                if (m_ProjectileName == "NemoProjectile")
+                {
+                    StartCoroutine("NemoProjectileTimer");
+                }
+                m_fTime = 0f;
+            }
+            else
+            {
+                m_fTime += Time.deltaTime;
+            }
         }
         else
         {
-            m_fTime += Time.deltaTime;
+            Collider[] HitColliders = Physics.OverlapSphere(transform.position, 100, LayerMask.GetMask("Enemy"));
+            foreach (Collider Collider in HitColliders)
+            {
+                m_Target = Collider.transform;
+                break;
+            }
         }
     }
 

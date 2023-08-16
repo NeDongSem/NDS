@@ -11,7 +11,7 @@ public class DongramiProjectile : Projectile
     public override void Init()
     {
         base.Init();
-        m_iLayerMask = 999999999; /*에너미 레이어 마스크 너어야 함*/
+        m_iLayerMask = LayerMask.GetMask("Enemy"); /*에너미 레이어 마스크 너어야 함*/
     }
 
     protected override void Shoot_Start()
@@ -43,7 +43,6 @@ public class DongramiProjectile : Projectile
 
     private void ExplosionEff()
     {
-
     }
 
     private void RangedAttack()
@@ -54,7 +53,12 @@ public class DongramiProjectile : Projectile
             //if (Collider.name == gameObject.name /* 자기 자신은 제외 */) 
             //    continue; /* 이 친구는 콜라이더를 안 가지고 있을 예정 */
 
-            //Collider.gameObject.GetComponent
+            Enemy enemy = Collider.gameObject.GetComponent<Enemy>();
+            if(enemy != null)
+            {
+                //enemy.hit(m_stProjectileInfo.Damage);
+                enemy.hit(2);
+            }
         }
     }
 }
