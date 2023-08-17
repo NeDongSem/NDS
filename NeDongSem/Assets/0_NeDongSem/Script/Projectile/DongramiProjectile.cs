@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DongramiProjectile : Projectile
 {
+    public float m_Speed;
     public float m_ExplosionRange;
     Vector3 m_v3TargetPos = Vector3.zero;
     int m_iLayerMask;
@@ -30,7 +31,7 @@ public class DongramiProjectile : Projectile
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, m_v3TargetPos, m_stProjectileInfo.Speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, m_v3TargetPos, m_Speed * Time.deltaTime);
         }
     }
 

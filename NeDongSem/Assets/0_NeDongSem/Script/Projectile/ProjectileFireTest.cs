@@ -8,7 +8,8 @@ public class ProjectileFireTest : MonoBehaviour
     public Transform m_Target;
     public float m_FireTime;
     public float m_Speed;
-    public float m_Damage;
+    public float m_Atk;
+    public float m_Cri;
     public eCCType m_eCCType = eCCType.eCC_End;
     public float m_CCValue;
     float m_fTime = 0f;
@@ -28,9 +29,9 @@ public class ProjectileFireTest : MonoBehaviour
             {
                 m_CurrentProjectileGameObject = ObjectPoolMng.Instance.Get_PoolingObject(m_ProjectileName);
                 stProjectileInfo stProjectileInfo;
-                stProjectileInfo.Speed = m_Speed;
-                stProjectileInfo.Damage = m_Damage;
-                stProjectileInfo.CCType = m_eCCType;
+                stProjectileInfo.Atk = m_Atk;
+                stProjectileInfo.Cri = 0f;
+                stProjectileInfo.CC = m_eCCType;
                 stProjectileInfo.CCValue = m_CCValue;
                 m_CurrentProjectileGameObject.GetComponent<Projectile>().Set_Shoot(transform, m_Target, stProjectileInfo);
                 if (m_ProjectileName == "NemoProjectile")

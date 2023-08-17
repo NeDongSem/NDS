@@ -2,18 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eCCType
-{
-    Slow,
-    Stun,
-    eCC_End
-}
-
 public struct stProjectileInfo
 {
-    public float Speed;
-    public float Damage;
-    public eCCType CCType;
+    public float Atk;
+    public float Cri;
+    public eCCType CC;
     public float CCValue;
 }
 
