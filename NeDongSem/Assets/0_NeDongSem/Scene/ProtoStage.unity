@@ -462,6 +462,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f4ca1db6ffbfe645bc4e30e671e208a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_NemoPrefab: {fileID: 0}
+  m_DongramiPrefab: {fileID: 0}
+  m_SemoPrefab: {fileID: 0}
 --- !u!4 &1925321415
 Transform:
   m_ObjectHideFlags: 0
