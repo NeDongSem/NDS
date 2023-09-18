@@ -22,7 +22,7 @@ public class NemoProjectile : Projectile
         {
             //닿은 적 데미지 && cc 주기(있다면)
             //닿은 위치에서 히트 이펙트 발생시키기
-            other.gameObject.GetComponent<Enemy>().hit(2);
+            other.gameObject.GetComponent<Enemy>().Set_Hit(2);
         }
     }
 }

@@ -9,7 +9,7 @@ public class EnemySpawnMng : MonoBehaviour
     static public EnemySpawnMng Instance { get { return instance; } }
 
     public string m_SheetRange = "";
-    public float m_EnemyZ = 0.02f;
+    public float m_EnemyZ = -0.02f;
 
     Dictionary<string, List<string>> m_StageEnemySpawnDictionary;
     List<string> m_EnemySpawnList;
@@ -148,6 +148,7 @@ public class EnemySpawnMng : MonoBehaviour
                 {
                     m_fTime = 0f;
                     m_fWaitTime = 0f;
+                    m_v3SpawnPos.z = m_EnemyZ;
                     CheckEnemySpawnState();
                 }
                 else
@@ -161,10 +162,11 @@ public class EnemySpawnMng : MonoBehaviour
 
     private void EnemySpawn()
     {
-        GameObject EnemyGameObject = ObjectPoolMng.Instance.Get_PoolingObject(m_EnemySpawnList[m_iEnemySpawnListIndex++]);
+        GameObject EnemyGameObject = ObjectPoolMng.Instance.Get_PoolingObject("Enemy");
         EnemyGameObject.SetActive(true);
         m_v3SpawnPos.z += 0.001f;
         EnemyGameObject.transform.position = m_v3SpawnPos;
+        EnemyGameObject.GetComponent<Enemy>()?.Set_EnemySpawn(m_EnemySpawnList[m_iEnemySpawnListIndex++]);
     }
 
     private void CheckEnemySpawnState()

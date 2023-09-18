@@ -4,10 +4,11 @@ using UnityEngine;
 
 public struct stProjectileInfo
 {
-    public float Atk;
-    public float Cri;
-    public eCCType CC;
-    public float CCValue;
+    public float fAtk;
+    public float fCri;
+    public eCCType eCC;
+    public float fCCValue1;
+    public float fCCValue2;
 }
 
 public class Projectile : PoolingObject

@@ -29,10 +29,11 @@ public class ProjectileFireTest : MonoBehaviour
             {
                 m_CurrentProjectileGameObject = ObjectPoolMng.Instance.Get_PoolingObject(m_ProjectileName);
                 stProjectileInfo stProjectileInfo;
-                stProjectileInfo.Atk = m_Atk;
-                stProjectileInfo.Cri = 0f;
-                stProjectileInfo.CC = m_eCCType;
-                stProjectileInfo.CCValue = m_CCValue;
+                stProjectileInfo.fAtk = m_Atk;
+                stProjectileInfo.fCri = 0f;
+                stProjectileInfo.eCC = m_eCCType;
+                stProjectileInfo.fCCValue1 = m_CCValue;
+                stProjectileInfo.fCCValue2 = m_CCValue;
                 m_CurrentProjectileGameObject.GetComponent<Projectile>().Set_Shoot(transform, m_Target, stProjectileInfo);
                 if (m_ProjectileName == "NemoProjectile")
                 {

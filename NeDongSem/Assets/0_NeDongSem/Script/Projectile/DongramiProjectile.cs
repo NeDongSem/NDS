@@ -58,7 +58,7 @@ public class DongramiProjectile : Projectile
             if(enemy != null)
             {
                 //enemy.hit(m_stProjectileInfo.Damage);
-                enemy.hit(2);
+                enemy.Set_Hit(2);
             }
         }
     }
