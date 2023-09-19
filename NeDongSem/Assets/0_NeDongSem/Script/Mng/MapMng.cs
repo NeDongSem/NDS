@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum eTileType
+{
+    Edge,
+    Enemy,
+    NDS,
+    Block,
+    TileType_End
+}
+
 public class MapMng : MonoBehaviour
 {
     static private MapMng instance = null;
     static public MapMng Instance { get { return instance; } }
-
-    public enum eTileType
-    {
-        Edge,
-        Enemy,
-        NDS,
-        Block,
-        TileType_End
-    }
 
     public string m_SheetRange = "";
 
@@ -297,6 +297,8 @@ public class MapMng : MonoBehaviour
 
         MeshRenderer TileMeshRenderer = _TileGameObject.GetComponent<MeshRenderer>();
         TileMeshRenderer.material = m_TileMaterialList[(int)TileType];
+
+        _TileGameObject.GetComponent<Tile>().TileType = TileType;
     }
 
     private eTileType StringToTileType(string _strTile)

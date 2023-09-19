@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIMng : UIBase
+public class UIMng_Legacy : UIBase
 {
     private string m_strUIName = string.Empty;
-    private static UIMng m_instance = null;
-    public static UIMng Instance
+    private static UIMng_Legacy m_instance = null;
+    public static UIMng_Legacy Instance
     {
         get
         {
             if (m_instance == null)
             {
-                UIMng obj = FindObjectOfType<UIMng>();
+                UIMng_Legacy obj = FindObjectOfType<UIMng_Legacy>();
                 m_instance = obj;
             }
             return m_instance;
         }
     }
-    private UIMng() { }
+    private UIMng_Legacy() { }
 
     private Dictionary<UIType, UIBase> m_uiDic = new Dictionary<UIType, UIBase>();
 

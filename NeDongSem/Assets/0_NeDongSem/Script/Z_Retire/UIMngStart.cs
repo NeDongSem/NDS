@@ -6,7 +6,7 @@ public class UIMngStart : MonoBehaviour
 {
     void Start()
     {
-        UIMng.Instance.LoadUI<UIRound>(UIType.UIRound);
-        UIMng.Instance.LoadUI<UIGold>(UIType.UIGold);
+        UIMng_Legacy.Instance.LoadUI<UIRound>(UIType.UIRound);
+        UIMng_Legacy.Instance.LoadUI<UIGold>(UIType.UIGold);
     }
 }

@@ -8,6 +8,13 @@ public class Tile : MonoBehaviour
     private int m_tileNumber = 0;
     private int m_col = 18;//¸ÊÀÇ ¿­ÀÇ ¼ö
 
+    private eTileType m_eTileType;
+    public eTileType TileType
+    {
+        get { return m_eTileType; }
+        set { m_eTileType = value; }
+    }
+
     void Start()
     {
         SetTileName();

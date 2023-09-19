@@ -36,6 +36,8 @@ public class InputMng : MonoBehaviour
     float m_fTouchPreMag;
     float m_fCameraZoom;
 
+    Vector3 m_v3ChoiceObjPos;
+
     private void Init()
     {
         m_TouchArray = new Touch[2];
@@ -45,7 +47,41 @@ public class InputMng : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
+        ClickObj();
+#else
         Touch();
+#endif
+    }
+
+    private void ClickObj()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            m_v3ChoiceObjPos = Input.mousePosition;
+            ChoiceObj();
+        }
+    }
+
+    private void ChoiceObj()
+    {
+        Ray ChoiceRay = Camera.main.ScreenPointToRay(m_v3ChoiceObjPos);
+        RaycastHit[] RaycastHitArry;
+
+        RaycastHitArry = Physics.RaycastAll(ChoiceRay, (Camera.main.transform.position.z * -2f),LayerMask.GetMask("Tile"));
+
+        if(RaycastHitArry.Length > 0)
+        {
+            GameObject FrontGameObject = RaycastHitArry[RaycastHitArry.Length - 1].transform.gameObject;
+            Tile ChoiceTile = FrontGameObject.GetComponent<Tile>();
+            if (!ReferenceEquals(ChoiceTile, null))
+            {
+                if(ChoiceTile.TileType == eTileType.NDS)
+                {
+                    UIMng.Instance.Set_ChoiceNDSTile(m_v3ChoiceObjPos,ChoiceTile);
+                }
+            }
+        }
     }
 
     private void Touch()
@@ -55,7 +91,7 @@ public class InputMng : MonoBehaviour
             TouchSave();
             if (Input.touchCount == 1)
             {
-                TouchUI();
+                TouchObj();
             }
             else
             {
@@ -76,9 +112,10 @@ public class InputMng : MonoBehaviour
         }
     }
 
-    private void TouchUI()
+    private void TouchObj()
     {
-
+        m_v3ChoiceObjPos = Input.GetTouch(0).position;
+        ChoiceObj();
     }
 
     private void TouchCamera()
