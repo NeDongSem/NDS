@@ -15,6 +15,20 @@ public class Tile : MonoBehaviour
         set { m_eTileType = value; }
     }
 
+    private Tower m_BulidTower = null;
+    public Tower BulidTower
+    {
+        get { return m_BulidTower; }
+        set { m_BulidTower = value; }
+    }
+
+    private bool m_bBulid = false;
+    public bool bBulid
+    {
+        get { return m_bBulid; }
+        set { m_bBulid = value; }
+    }
+
     void Start()
     {
         SetTileName();

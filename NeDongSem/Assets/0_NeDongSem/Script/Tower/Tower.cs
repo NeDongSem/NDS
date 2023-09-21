@@ -55,12 +55,12 @@ public class Tower : MonoBehaviour
     protected float m_fFireDelayTime;
     protected float m_fTime;
 
-    protected void Awake()
+    virtual protected void Awake()
     {
         Init();
     }
 
-    protected void Update()
+    virtual protected void Update()
     {
         EnemyTargeting();
         ShootingCheck();
@@ -75,12 +75,7 @@ public class Tower : MonoBehaviour
 
     protected void EnemyTargeting()
     {
-        if(Vector3.Distance(transform.position, m_TargetTransform.position) > m_stTowerInfo.fDis)
-        {
-            m_TargetTransform = null;
-        }
-
-        if(m_TargetTransform == null)
+        if(ReferenceEquals(m_TargetTransform,null))
         {
             Collider[] HitColliders = Physics.OverlapSphere(transform.position, m_stTowerInfo.fDis, LayerMask.GetMask("Enemy"));
             float fDisTemp = m_stTowerInfo.fDis + 1f;
@@ -88,12 +83,20 @@ public class Tower : MonoBehaviour
             {
                 float fDis = Vector3.Distance(transform.position, Collider.transform.position);
                 //가장 가까운 적을 타겟팅
-                if(fDis < fDisTemp)
+                if (fDis < fDisTemp)
                 {
                     fDisTemp = fDis;
                     m_TargetTransform = Collider.transform;
                 }
             }
+        }
+        else if(Vector3.Distance(transform.position, m_TargetTransform.position) > m_stTowerInfo.fDis)
+        {
+            m_TargetTransform = null;
+        }
+        else if(m_TargetTransform.gameObject.activeSelf == false)
+        {
+            m_TargetTransform = null;
         }
     }
 

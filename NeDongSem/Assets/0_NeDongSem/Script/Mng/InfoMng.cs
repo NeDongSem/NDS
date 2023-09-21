@@ -7,7 +7,7 @@ public class InfoMng : MonoBehaviour
     static private InfoMng instance = null;
     static public InfoMng Instance { get { return instance; } }
 
-    public string m_TowerSheetRange = "A1:E25";
+    public string m_TowerSheetRange = "A1:H25";
     public string m_EnemySheetRange = "A1:C51";
     List<string> m_TowerInfoTitleList;
     Dictionary<string, Dictionary<string,string>> m_TowerInfoDictionary;
@@ -36,10 +36,10 @@ public class InfoMng : MonoBehaviour
         }
 
         GoogleSheetMng.delDataProcessingFunc delTowerInfoSettingFunc = new GoogleSheetMng.delDataProcessingFunc(TowerInfoSetting);
-        GoogleSheetMng.Instance.Get_GoogleSheetData("Tower", "A1:E25", delTowerInfoSettingFunc);
+        GoogleSheetMng.Instance.Get_GoogleSheetData("Tower", m_TowerSheetRange, delTowerInfoSettingFunc);
 
         GoogleSheetMng.delDataProcessingFunc delEnemyInfoSettingFunc = new GoogleSheetMng.delDataProcessingFunc(EnemyInfoSetting);
-        GoogleSheetMng.Instance.Get_GoogleSheetData("Enemy", "A1:C51", delEnemyInfoSettingFunc);
+        GoogleSheetMng.Instance.Get_GoogleSheetData("Enemy", m_EnemySheetRange, delEnemyInfoSettingFunc);
     }
 
     private void TowerInfoSetting(string[] _strTowerInfoArray)

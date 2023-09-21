@@ -8,7 +8,9 @@ public class UIMng : MonoBehaviour
     static private UIMng instance = null;
     static public UIMng Instance { get { return instance; } }
 
-    public GameObject m_BuildTowerUI;
+    private Dictionary<string, GameObject> m_ChildObjDictionary;
+
+    private bool m_bBuildTowerOnFrame = false;
 
     private void Awake()
     {
@@ -27,26 +29,57 @@ public class UIMng : MonoBehaviour
 
     private void Init()
     {
+        SettingChildObj();
     }
 
-    public void Set_ChoiceNDSTile(Vector3 _v3ChoicePos, Tile _ChoiceTile)
+    private void SettingChildObj()
     {
-        BuildTowerUI(_v3ChoicePos);
+        m_ChildObjDictionary = new Dictionary<string, GameObject>();
+
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            GameObject ChildObj = transform.GetChild(i).gameObject;
+            m_ChildObjDictionary.Add(ChildObj.name, ChildObj);
+        }
     }
 
-    private void BuildTowerUI()
+    public void Set_ChoiceNDSTile(Tile _ChoiceTile)
     {
-        m_BuildTowerUI.SetActive(false);
+        if (!_ChoiceTile.bBulid)
+        {
+            BuildTowerUIOn(_ChoiceTile);
+        }
     }
 
-    private void BuildTowerUI(Vector3 _v3ChoicePos)
+    private void BuildTowerUIOff()
     {
-        m_BuildTowerUI.SetActive(true);
+        if (!m_bBuildTowerOnFrame)
+        {
+            m_ChildObjDictionary["BuildTower"].SetActive(false);
+        }
+        m_bBuildTowerOnFrame = false;
+    }
+
+    private void BuildTowerUIOn(Tile _ChoiceTile)
+    {
+        if(m_ChildObjDictionary["BuildTower"].activeSelf)
+        {
+            return;
+        }
+
+        if(!m_bBuildTowerOnFrame)
+        {
+            m_bBuildTowerOnFrame = true;
+        }
+
+        m_ChildObjDictionary["BuildTower"].SetActive(true);
 
         Vector2 v2ChoiceScreenPos;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out v2ChoiceScreenPos);
-        m_BuildTowerUI.GetComponent<RectTransform>().localPosition = ScreenPosCalibration(v2ChoiceScreenPos);
+        m_ChildObjDictionary["BuildTower"].GetComponent<RectTransform>().localPosition = ScreenPosCalibration(v2ChoiceScreenPos);
+
+        m_ChildObjDictionary["BuildTower"].GetComponent<BuildTower>().ChoiceTile = _ChoiceTile;
     }
 
     private Vector2 ScreenPosCalibration(Vector2 _v2ChoiceScreenPos)
@@ -56,7 +89,7 @@ public class UIMng : MonoBehaviour
         float fWidthHalf = GetComponent<RectTransform>().rect.width * 0.5f;
         float fHeightHalf = GetComponent<RectTransform>().rect.height * 0.5f;
 
-        Rect B_BackGroundRect = m_BuildTowerUI.transform.GetChild(0).GetComponent<RectTransform>().rect;
+        Rect B_BackGroundRect = m_ChildObjDictionary["BuildTower"].transform.GetChild(0).GetComponent<RectTransform>().rect;
 
         if (((_v2ChoiceScreenPos.x - B_BackGroundRect.width) < (fWidthHalf * -1f)))
         {
@@ -71,4 +104,18 @@ public class UIMng : MonoBehaviour
     }
 
 
+    //터치가 일어났을 때 뭔가 하는 함수
+    public void Set_OneTouch_Began()
+    {
+        
+    }
+
+    //터치가 끝났을 때 뭔가 하는 함수
+    public void Set_OneTouch_Ended()
+    {
+        if (m_ChildObjDictionary["BuildTower"].activeSelf)
+        {
+            BuildTowerUIOff();
+        }
+    }
 }

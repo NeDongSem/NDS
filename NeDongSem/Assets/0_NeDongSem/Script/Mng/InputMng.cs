@@ -58,8 +58,11 @@ public class InputMng : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            m_v3ChoiceObjPos = Input.mousePosition;
-            ChoiceObj();
+            OneTouch_Began();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            OneTouch_Ended();
         }
     }
 
@@ -78,7 +81,7 @@ public class InputMng : MonoBehaviour
             {
                 if(ChoiceTile.TileType == eTileType.NDS)
                 {
-                    UIMng.Instance.Set_ChoiceNDSTile(m_v3ChoiceObjPos,ChoiceTile);
+                    UIMng.Instance.Set_ChoiceNDSTile(ChoiceTile);
                 }
             }
         }
@@ -89,19 +92,43 @@ public class InputMng : MonoBehaviour
         if (Input.touchCount > 0)
         {
             TouchSave();
-            if (Input.touchCount == 1)
+            if(Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                TouchObj();
+                OneTouch_Began();
             }
-            else
+            else if(Input.GetTouch(0).phase == TouchPhase.Ended)
             {
-                TouchCamera();
+                OneTouch_Ended();
             }
         }
         else
         {
             TouchReset();
         }
+    }
+
+    //손가락을 댈 때
+    private void OneTouch_Began()
+    {
+#if UNITY_EDITOR
+        TouchObj(); //마우스는 어짜피 원 터치라
+#else
+        if (Input.touchCount == 1)
+        {
+            TouchObj();
+        }
+        else
+        {
+            TouchCamera();
+        }
+#endif
+        UIMng.Instance.Set_OneTouch_Began();
+    }
+
+    //손가락을 뗄 때
+    private void OneTouch_Ended()
+    {
+        UIMng.Instance.Set_OneTouch_Ended();
     }
 
     private void TouchSave()
@@ -114,7 +141,11 @@ public class InputMng : MonoBehaviour
 
     private void TouchObj()
     {
+#if UNITY_EDITOR
+        m_v3ChoiceObjPos = Input.mousePosition;
+#else
         m_v3ChoiceObjPos = Input.GetTouch(0).position;
+#endif
         ChoiceObj();
     }
 

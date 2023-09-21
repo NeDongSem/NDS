@@ -19,4 +19,24 @@ public class Semo : Tower
         stProjectileInfo.fCCValue2 = m_stTowerInfo.fCCValue2;
         ProjectileGameObject.GetComponent<Projectile>()?.Set_Shoot(transform, m_TargetTransform, stProjectileInfo);
     }
+
+    protected override void Update()
+    {
+        base.Update();
+        SettingRotation();
+    }
+
+    private void SettingRotation()
+    {
+        if(ReferenceEquals(m_TargetTransform,null))
+        {
+            transform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            float fRadin = Mathf.Atan2(m_TargetTransform.position.y - transform.position.y, m_TargetTransform.position.x - transform.position.x);
+            fRadin *= Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, fRadin + 270f);
+        }
+    }
 }

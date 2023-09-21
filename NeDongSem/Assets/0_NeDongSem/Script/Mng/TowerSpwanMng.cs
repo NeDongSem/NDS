@@ -73,7 +73,7 @@ public class TowerSpwanMng : MonoBehaviour
         m_iSpwanNum = 0;
     }
 
-    public GameObject Set_TowerSpwan(Vector3 _v3SpawnPos, eTowerType _eTowerType)
+    public GameObject Set_TowerSpwan(Tile _ChoiceTile, eTowerType _eTowerType)
     {
         TowerInfoSetting(_eTowerType);
         GameObject SpwanTowerGameObject = null;
@@ -81,15 +81,15 @@ public class TowerSpwanMng : MonoBehaviour
         {
             case eTowerType.Nemo:
                 SpwanTowerGameObject = Instantiate(m_NemoPrefab);
-                SpwanTowerGameObject.transform.position = _v3SpawnPos;
+                SpwanTowerGameObject.transform.position = _ChoiceTile.transform.position;
                 break;
             case eTowerType.Dongrami:
                 SpwanTowerGameObject = Instantiate(m_DongramiPrefab);
-                SpwanTowerGameObject.transform.position = _v3SpawnPos;
+                SpwanTowerGameObject.transform.position = _ChoiceTile.transform.position;
                 break;
             case eTowerType.Semo:
                 SpwanTowerGameObject = Instantiate(m_SemoPrefab);
-                SpwanTowerGameObject.transform.position = _v3SpawnPos;
+                SpwanTowerGameObject.transform.position = _ChoiceTile.transform.position;
                 break;
             case eTowerType.eTowerType_End:
                 break;
@@ -99,6 +99,9 @@ public class TowerSpwanMng : MonoBehaviour
         Vector3 TowerPos = SpwanTowerGameObject.transform.position;
         TowerPos.z = m_fTowerZ + (m_fTowerAddZ * ++m_iSpwanNum);
         SpwanTowerGameObject.transform.position = TowerPos;
+
+        _ChoiceTile.BulidTower = SpwanTowerGameObject.GetComponent<Tower>();
+        _ChoiceTile.bBulid = true;
 
         return SpwanTowerGameObject;
     }

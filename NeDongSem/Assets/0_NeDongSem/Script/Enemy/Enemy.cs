@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
     Vector3 m_v3TargetPos;
     float m_fTime;
 
+    List<Projectile> m_AtkMeProjectileList;
+
     private void Awake()
     {
         Init();
@@ -31,13 +33,13 @@ public class Enemy : MonoBehaviour
 
     public void Init()
     {
-       
+        m_AtkMeProjectileList = new List<Projectile>();
     }
 
     public void Set_EnemySpawn(string _strEnemyName)
     {
         SettingInfo(_strEnemyName);
-
+        m_AtkMeProjectileList.Clear();
     }
 
     private void SettingInfo(string _strEnemyName)
@@ -109,9 +111,7 @@ public class Enemy : MonoBehaviour
 
     private void Goal()
     {
-        transform.position = Vector3.zero;
-        ObjectPoolMng.Instance.Return_PoolingObject(gameObject, "Enemy");
-        gameObject.SetActive(false);
+        Return();
     }
 
     public void Set_Hit(int _iDmg)
@@ -119,9 +119,7 @@ public class Enemy : MonoBehaviour
         m_stEnemyInfo.iHp -= _iDmg;
         if(m_stEnemyInfo.iHp <= 0)
         {
-            transform.position = Vector3.zero;
-            ObjectPoolMng.Instance.Return_PoolingObject(gameObject, "Enemy");
-            gameObject.SetActive(false);
+            Return();
         }
     }
 
@@ -137,4 +135,34 @@ public class Enemy : MonoBehaviour
         m_stEnemyInfo.fCCValue1 = _fCCValue1;
         m_stEnemyInfo.fCCValue2 = _fCCValue2;
     }
+
+    public void Set_AddAtkMeProjectileList(Projectile _Projectile)
+    {
+        m_AtkMeProjectileList.Add(_Projectile);
+    }
+
+    public void Set_RemoveAtkMeProjectileList(Projectile _Projectile)
+    {
+        for(int i = 0; i < m_AtkMeProjectileList.Count; ++i)
+        {
+            if(ReferenceEquals(m_AtkMeProjectileList[i], _Projectile))
+            {
+                m_AtkMeProjectileList.RemoveAt(i);
+                return;
+            }
+        }
+    }
+
+    private void Return()
+    {
+        for (int i = 0; i < m_AtkMeProjectileList.Count; ++i)
+        {
+            m_AtkMeProjectileList[i].Shoot_End(false);
+        }
+
+        transform.position = Vector3.zero;
+        ObjectPoolMng.Instance.Return_PoolingObject(gameObject, "Enemy");
+        gameObject.SetActive(false);
+    }
+
 }
