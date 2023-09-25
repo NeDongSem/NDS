@@ -118,4 +118,19 @@ public class UIMng : MonoBehaviour
             BuildTowerUIOff();
         }
     }
+
+    public GameObject Get_ChildObj(string _strName)
+    {
+        return m_ChildObjDictionary[_strName];
+    }
+
+    public bool Set_EnemyGoal()
+    {
+        return m_ChildObjDictionary["Inventory"].GetComponent<Inventory>().Set_EnemyGoal();
+    }
+
+    public bool Set_Gold(int _iAddGold)
+    {
+        return m_ChildObjDictionary["Inventory"].GetComponent<Inventory>().Set_Gold(_iAddGold);
+    }
 }

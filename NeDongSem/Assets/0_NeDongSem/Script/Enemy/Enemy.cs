@@ -12,14 +12,22 @@ public class Enemy : MonoBehaviour
         public eCCType eCC;
         public float fCCValue1;
         public float fCCValue2;
+        public int iGold;
     }
 
     EnemyInfo m_stEnemyInfo;
+    int m_iMaxHp;
+    public float HpRatio
+    {
+        get { return (float)m_stEnemyInfo.iHp / (float)m_iMaxHp; }
+    }
     int m_iTileIndex;
     Vector3 m_v3TargetPos;
     float m_fTime;
 
     List<Projectile> m_AtkMeProjectileList;
+
+    EnemyHpBar m_EnemyHpBar;
 
     private void Awake()
     {
@@ -40,6 +48,7 @@ public class Enemy : MonoBehaviour
     {
         SettingInfo(_strEnemyName);
         m_AtkMeProjectileList.Clear();
+        SettingHpBar();
     }
 
     private void SettingInfo(string _strEnemyName)
@@ -47,14 +56,22 @@ public class Enemy : MonoBehaviour
         m_stEnemyInfo = new EnemyInfo();
         m_stEnemyInfo.strEnemyName = _strEnemyName;
         m_stEnemyInfo.iHp = int.Parse(InfoMng.Instance.Get_EnemyInfo(m_stEnemyInfo.strEnemyName, "Hp"));
+        m_iMaxHp = m_stEnemyInfo.iHp;
         m_stEnemyInfo.iSpeed = int.Parse(InfoMng.Instance.Get_EnemyInfo(m_stEnemyInfo.strEnemyName, "Speed"));
         m_stEnemyInfo.eCC = eCCType.None;
         m_stEnemyInfo.fCCValue1 = 0f;
         m_stEnemyInfo.fCCValue2 = 0f;
+        m_stEnemyInfo.iGold = int.Parse(InfoMng.Instance.Get_EnemyInfo(m_stEnemyInfo.strEnemyName, "Gold"));
         m_iTileIndex = 0;
         m_v3TargetPos = MapMng.Instance.EnemyTileList[m_iTileIndex].transform.position;
         m_v3TargetPos.z = transform.position.z;
         m_fTime = 0f;
+    }
+
+    private void SettingHpBar()
+    {
+        m_EnemyHpBar = ObjectPoolMng.Instance.Get_PoolingObject("EnemyHpBar").GetComponent<EnemyHpBar>();
+        m_EnemyHpBar.EnemyObj = this;
     }
 
     private void Move()
@@ -112,6 +129,7 @@ public class Enemy : MonoBehaviour
     private void Goal()
     {
         Return();
+        UIMng.Instance.Set_EnemyGoal();
     }
 
     public void Set_Hit(int _iDmg)
@@ -119,6 +137,7 @@ public class Enemy : MonoBehaviour
         m_stEnemyInfo.iHp -= _iDmg;
         if(m_stEnemyInfo.iHp <= 0)
         {
+            UIMng.Instance.Set_Gold(m_stEnemyInfo.iGold);
             Return();
         }
     }
@@ -159,6 +178,8 @@ public class Enemy : MonoBehaviour
         {
             m_AtkMeProjectileList[i].Shoot_End(false);
         }
+
+        m_EnemyHpBar.Set_Return();
 
         transform.position = Vector3.zero;
         ObjectPoolMng.Instance.Return_PoolingObject(gameObject, "Enemy");

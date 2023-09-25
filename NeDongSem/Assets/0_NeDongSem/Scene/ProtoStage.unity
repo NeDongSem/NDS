@@ -208,6 +208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 173685978}
+  - component: {fileID: 173685979}
   m_Layer: 5
   m_Name: I_Hp
   m_TagString: Untagged
@@ -238,6 +239,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &173685979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173685977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67051ac1a1d0bef44a3ebad304b4ad69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_iHp: 3
 --- !u!1 &235161071
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +633,7 @@ RectTransform:
   - {fileID: 1378966562}
   - {fileID: 1335368510}
   - {fileID: 1638851997}
+  - {fileID: 1884352163}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1662,11 +1677,13 @@ MonoBehaviour:
   - {fileID: 6146238621189915905, guid: dfc69db4a3905894b8ebe3096ba82ebe, type: 3}
   - {fileID: 5781908695988041903, guid: 02f11209935e10e4487356f67d0f86c1, type: 3}
   - {fileID: 8550740725119456316, guid: a21ebbfbe2b77af46b0cf3192495cef6, type: 3}
+  - {fileID: 7605838826790140809, guid: e79ef960e2395904da319875ade66077, type: 3}
   m_PoolingObjectNameList:
   - SemoProjectile
   - NemoProjectile
   - DongramiProjectile
   - Enemy
+  - EnemyHpBar
   m_BasicCreateCount: 10
 --- !u!4 &1130525720
 Transform:
@@ -1751,6 +1768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1335368510}
+  - component: {fileID: 1335368511}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -1782,6 +1800,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 90}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1335368511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335368509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264aa4699968c4a4c804d00d9c6df0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1378966561
 GameObject:
   m_ObjectHideFlags: 0
@@ -2084,6 +2114,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787055221}
   m_CullTransparentMesh: 1
+--- !u!1 &1884352162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1884352163}
+  m_Layer: 5
+  m_Name: EnemyHpBarList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1884352163
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884352162}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 475280761}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1894399695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,6 +2159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1894399696}
+  - component: {fileID: 1894399697}
   m_Layer: 5
   m_Name: I_Gold
   m_TagString: Untagged
@@ -2123,6 +2190,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &1894399697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894399695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f32944dc88ac74686a54a7b8750a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GoldTxt: {fileID: 600040557}
+  m_iGold: 70
 --- !u!1 &1913985509
 GameObject:
   m_ObjectHideFlags: 0
@@ -2530,8 +2611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e716742904ff8324bbcf432fe552b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TowerSheetRange: A1:H25
-  m_EnemySheetRange: A1:C51
+  m_TowerSheetRange: A1:I25
+  m_EnemySheetRange: A1:D51
 --- !u!4 &2108996932
 Transform:
   m_ObjectHideFlags: 0

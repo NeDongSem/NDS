@@ -18,7 +18,11 @@ public class BuildTower : MonoBehaviour
             return;
         }
 
-        TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Nemo);
+        if(UIMng.Instance.Set_Gold(int.Parse(InfoMng.Instance.Get_TowerInfo("Nemo_Lv1", "Gold"))* -1))
+        {
+            TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Nemo);
+        }
+
         m_ChoiceTile = null;
     }
 
@@ -29,7 +33,10 @@ public class BuildTower : MonoBehaviour
             return;
         }
 
-        TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Dongrami);
+        if (UIMng.Instance.Set_Gold(int.Parse(InfoMng.Instance.Get_TowerInfo("Dongrami_Lv1", "Gold")) * -1))
+        {
+            TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Dongrami);
+        }
         m_ChoiceTile = null;
     }
 
@@ -40,7 +47,10 @@ public class BuildTower : MonoBehaviour
             return;
         }
 
-        TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Semo);
+        if (UIMng.Instance.Set_Gold(int.Parse(InfoMng.Instance.Get_TowerInfo("Semo_Lv1", "Gold")) * -1))
+        {
+            TowerSpwanMng.Instance.Set_TowerSpwan(m_ChoiceTile, eTowerType.Semo);
+        }
         m_ChoiceTile = null;
     }
 

@@ -101,7 +101,7 @@ public class ObjectPoolMng : MonoBehaviour
     public void Return_PoolingObject(GameObject _PoolingObject, string _strName)
     {
         _PoolingObject.GetComponent<PoolingObject>()?.Set_End();
-        _PoolingObject.transform.parent = transform.Find(_strName);
+        _PoolingObject.transform.SetParent(transform.Find(_strName));
         m_ObjectPoolDictionary[_strName].Enqueue(_PoolingObject);
     }
 
