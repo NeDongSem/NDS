@@ -30,13 +30,46 @@ public class InputMng : MonoBehaviour
     public Vector2 m_CameraMoveMinMaxPosY = Vector2.zero;
     public Vector2 m_CameraFovMinMax = Vector2.zero;
     Vector2 m_v2TouchCenterPos = Vector2.zero;
+    public Vector2 TouchCenterPos
+    {
+        get { return m_v2TouchCenterPos; }
+    }
     Vector2 m_v2TouchPreCenterPos = Vector2.zero;
+    public Vector2 TouchPreCenterPos
+    {
+        get { return m_v2TouchPreCenterPos; }
+    }
     Vector2 m_v2TouchMovePos = Vector2.zero;
+    public Vector2 TouchMovePos
+    {
+        get { return m_v2TouchMovePos; }
+    }
     float m_fTouchMag;
+    public float TouchMag
+    {
+        get { return m_fTouchMag; }
+    }
     float m_fTouchPreMag;
+    public float TouchPreMag
+    {
+        get { return m_fTouchPreMag; }
+    }
     float m_fCameraZoom;
+    public float CameraZoom
+    {
+        get { return m_fCameraZoom; }
+    }
+    Vector3 m_v3ChoiceObjPos = Vector3.zero;
+    public Vector3 ChoiceObjPos
+    {
+        get { return m_v3ChoiceObjPos; }
+    }
 
-    Vector3 m_v3ChoiceObjPos;
+    string m_Dbug = "start";
+    public string Dbug
+    {
+        get { return m_Dbug; }
+    }
 
     private void Init()
     {
@@ -66,14 +99,35 @@ public class InputMng : MonoBehaviour
         }
     }
 
-    private void ChoiceObj()
+    private void ChoiceObj_Mobile()
+    {
+        Ray ChoiceRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        RaycastHit[] RaycastHitArry;
+
+        RaycastHitArry = Physics.RaycastAll(ChoiceRay, (Camera.main.transform.position.z * -2f), LayerMask.GetMask("Tile"));
+
+        if (RaycastHitArry.Length > 0)
+        {
+            GameObject FrontGameObject = RaycastHitArry[RaycastHitArry.Length - 1].transform.gameObject;
+            Tile ChoiceTile = FrontGameObject.GetComponent<Tile>();
+            if (!ReferenceEquals(ChoiceTile, null))
+            {
+                if (ChoiceTile.TileType == eTileType.NDS)
+                {
+                    UIMng.Instance.Set_ChoiceNDSTile(ChoiceTile);
+                }
+            }
+        }
+    }
+
+    private void ChoiceObj_Mouse()
     {
         Ray ChoiceRay = Camera.main.ScreenPointToRay(m_v3ChoiceObjPos);
         RaycastHit[] RaycastHitArry;
 
         RaycastHitArry = Physics.RaycastAll(ChoiceRay, (Camera.main.transform.position.z * -2f),LayerMask.GetMask("Tile"));
 
-        if(RaycastHitArry.Length > 0)
+        if (RaycastHitArry.Length > 0)
         {
             GameObject FrontGameObject = RaycastHitArry[RaycastHitArry.Length - 1].transform.gameObject;
             Tile ChoiceTile = FrontGameObject.GetComponent<Tile>();
@@ -89,16 +143,32 @@ public class InputMng : MonoBehaviour
 
     private void Touch()
     {
-        if (Input.touchCount > 0)
+        if (Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            OneTouch_Ended();
+        }
+
+        if(Input.touchCount > 1)
         {
             TouchSave();
-            if(Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.GetTouch(1).phase == TouchPhase.Began)
             {
-                OneTouch_Began();
+                UIMng.Instance.BuildTowerUIPowerOff();
+                TouchCameraSetting();
+                m_Dbug = "In";
             }
-            else if(Input.GetTouch(0).phase == TouchPhase.Ended)
+            else
             {
-                OneTouch_Ended();
+                TouchCamera();
+            }
+        }
+        else if (Input.touchCount > 0)
+        {
+            TouchSave();
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                TouchObj();
+                OneTouch_Began();
             }
         }
         else
@@ -110,18 +180,6 @@ public class InputMng : MonoBehaviour
     //손가락을 댈 때
     private void OneTouch_Began()
     {
-#if UNITY_EDITOR
-        TouchObj(); //마우스는 어짜피 원 터치라
-#else
-        if (Input.touchCount == 1)
-        {
-            TouchObj();
-        }
-        else
-        {
-            TouchCamera();
-        }
-#endif
         UIMng.Instance.Set_OneTouch_Began();
     }
 
@@ -133,7 +191,13 @@ public class InputMng : MonoBehaviour
 
     private void TouchSave()
     {
-        for (int i = 0; i < m_TouchArray.Length; ++i)
+        int iCount = Input.touchCount;
+        if(iCount > m_TouchArray.Length)
+        {
+            iCount = m_TouchArray.Length;
+        }
+
+        for (int i = 0; i < iCount; ++i)
         {
             m_TouchArray[i] = Input.GetTouch(i);
         }
@@ -143,10 +207,35 @@ public class InputMng : MonoBehaviour
     {
 #if UNITY_EDITOR
         m_v3ChoiceObjPos = Input.mousePosition;
+        ChoiceObj_Mouse();
 #else
-        m_v3ChoiceObjPos = Input.GetTouch(0).position;
+        m_v3ChoiceObjPos.x = m_TouchArray[0].position.x;
+        m_v3ChoiceObjPos.y = m_TouchArray[0].position.y;
+        ChoiceObj_Mobile();
 #endif
-        ChoiceObj();
+    }
+
+    private void TouchCameraSetting()
+    {
+        TouchCameraMoveSetting();
+        TouchCameraZoomSetting();
+    }
+
+    private void TouchCameraMoveSetting()
+    {
+        if (m_v2TouchPreCenterPos.x <= 0f && m_v2TouchPreCenterPos.y <= 0f)
+        {
+            m_v2TouchPreCenterPos.x = (m_TouchArray[0].position.x + m_TouchArray[1].position.x) * 0.5f;
+            m_v2TouchPreCenterPos.y = (m_TouchArray[0].position.y + m_TouchArray[1].position.y) * 0.5f;
+        }
+    }
+
+    private void TouchCameraZoomSetting()
+    {
+        if (m_fTouchPreMag <= 0f)
+        {
+            m_fTouchPreMag = (m_TouchArray[0].position - m_TouchArray[1].position).magnitude;
+        }
     }
 
     private void TouchCamera()
@@ -157,13 +246,6 @@ public class InputMng : MonoBehaviour
 
     private void TouchCameraMove()
     {
-        if(m_v2TouchPreCenterPos.x <= 0f && m_v2TouchPreCenterPos.y <= 0f)
-        {
-            m_v2TouchPreCenterPos.x = (m_TouchArray[0].position.x + m_TouchArray[1].position.x) * 0.5f;
-            m_v2TouchPreCenterPos.y = (m_TouchArray[0].position.y + m_TouchArray[1].position.y) * 0.5f;
-            return;
-        }
-
         m_v2TouchCenterPos.x = (m_TouchArray[0].position.x + m_TouchArray[1].position.x) * 0.5f;
         m_v2TouchCenterPos.y = (m_TouchArray[0].position.y + m_TouchArray[1].position.y) * 0.5f;
 
@@ -199,12 +281,6 @@ public class InputMng : MonoBehaviour
 
     private void TouchCameraZoom()
     {
-        if(m_fTouchPreMag <= 0f)
-        {
-            m_fTouchPreMag = (m_TouchArray[0].position - m_TouchArray[1].position).magnitude;
-            return;
-        }
-
         m_fTouchMag = (m_TouchArray[0].position - m_TouchArray[1].position).magnitude;
 
         m_fCameraZoom = m_fTouchPreMag - m_fTouchMag;

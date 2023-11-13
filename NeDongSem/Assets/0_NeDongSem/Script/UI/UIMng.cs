@@ -60,6 +60,12 @@ public class UIMng : MonoBehaviour
         m_bBuildTowerOnFrame = false;
     }
 
+    public void BuildTowerUIPowerOff()
+    {
+        m_ChildObjDictionary["BuildTower"].SetActive(false);
+        m_bBuildTowerOnFrame = false;
+    }
+
     private void BuildTowerUIOn(Tile _ChoiceTile)
     {
         if(m_ChildObjDictionary["BuildTower"].activeSelf)
